@@ -1,0 +1,22 @@
+name: Smart Deploy (Preview)
+on:
+  push:
+    branches:
+      - main
+
+jobs:
+  deploy_update:
+    name: Fast OTA Update
+    type: update
+    if: "!contains(github.event.head_commit.modified, 'package.json') && !contains(github.event.head_commit.modified, 'app.json')"
+    params:
+      branch: preview
+      message: "Automated OTA update from GitHub Actions/EAS"
+
+  trigger_build:
+    name: Trigger New APK Build
+    type: build
+    if: "contains(github.event.head_commit.modified, 'package.json') || contains(github.event.head_commit.modified, 'app.json')"
+    params:
+      platform: android
+      profile: preview

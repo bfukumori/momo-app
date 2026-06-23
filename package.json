@@ -11,8 +11,7 @@
 		"ios": "expo start --ios",
 		"web": "expo start --web",
 		"lint": "pnpx @biomejs/biome check --write",
-		"build:android": "eas build -p android --profile preview --auto-increment",
-		"build:ios": "eas build -p ios --profile preview --auto-increment"
+		"build:android": "eas build -p android --profile preview"
 	},
 	"dependencies": {
 		"@expo/ui": "~56.0.18",
@@ -32,6 +31,7 @@
 		"expo-status-bar": "~56.0.4",
 		"expo-symbols": "~56.0.6",
 		"expo-system-ui": "~56.0.5",
+		"expo-updates": "~56.0.19",
 		"expo-web-browser": "~56.0.5",
 		"lottie-react-native": "^7.3.8",
 		"lucide-react-native": "^1.21.0",

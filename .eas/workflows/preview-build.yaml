@@ -8,7 +8,7 @@ jobs:
   deploy_update:
     name: Fast OTA Update
     type: update
-    if: "!contains(github.event.head_commit.modified, 'package.json') && !contains(github.event.head_commit.modified, 'app.json')"
+    if: "!contains(changed_files, 'package.json') && !contains(changed_files, 'app.json')"
     params:
       branch: preview
       message: "Automated OTA update from EAS Workflows"
@@ -16,7 +16,7 @@ jobs:
   trigger_build:
     name: Trigger New APK Build
     type: build
-    if: "contains(github.event.head_commit.modified, 'package.json') || contains(github.event.head_commit.modified, 'app.json')"
+    if: "contains(changed_files, 'package.json') || contains(changed_files, 'app.json')"
     params:
       platform: android
       profile: preview

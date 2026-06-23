@@ -1,18 +1,13 @@
-import { ActivityIndicator, StyleSheet, View } from "react-native";
+// app/index.tsx
+import { Redirect } from "expo-router";
+import { useAuthStore } from "@/store/useAuthStore";
 
 export default function IndexScreen() {
-	return (
-		<View style={styles.container}>
-			<ActivityIndicator size="large" color="#ffffff" />
-		</View>
-	);
-}
+	const isAuthenticated = useAuthStore((state) => state.isAuthenticated);
 
-const styles = StyleSheet.create({
-	container: {
-		flex: 1,
-		justifyContent: "center",
-		alignItems: "center",
-		backgroundColor: "#0F172A",
-	},
-});
+	if (isAuthenticated) {
+		return <Redirect href="/(app)/dashboard" />;
+	}
+
+	return <Redirect href="/(auth)/login" />;
+}

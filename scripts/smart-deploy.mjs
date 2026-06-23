@@ -39,7 +39,7 @@ try {
 		console.log("Disparando OTA Update rápido (JavaScript apenas)...");
 
 		execSync(
-			`eas update --branch preview --environment preview --message "Update automático (Fingerprint: ${currentHash})" --non-interactive`,
+			`eas update --branch preview --environment preview --platform android --message "Update automático (Fingerprint: ${currentHash})" --non-interactive`,
 			{ stdio: "inherit" },
 		);
 	} else {

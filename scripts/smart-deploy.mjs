@@ -6,7 +6,7 @@ const parseSafeJSON = (output) => {
 	try {
 		const match = output.match(/\{[\s\S]*\}|\[[\s\S]*\]/);
 		return JSON.parse(match ? match[0] : output);
-	} catch (e) {
+	} catch {
 		console.error(
 			"\n❌ Falha ao ler o JSON. Saída original recebida:\n",
 			output,

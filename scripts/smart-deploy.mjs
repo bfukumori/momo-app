@@ -25,14 +25,8 @@ try {
 	console.log("📡 Buscando builds finalizados no EAS...");
 
 	const buildsOutput = execSync(
-		"eas build:list --platform=android --profile=preview --status=finished --limit=10 --json",
-		{
-			encoding: "utf-8",
-			env: {
-				...process.env,
-				CI: "1",
-			},
-		},
+		"eas build:list --platform=android --profile=preview --status=finished --limit=10 --json --non-interactive",
+		{ encoding: "utf-8" },
 	);
 	const builds = parseSafeJSON(buildsOutput);
 
@@ -45,28 +39,16 @@ try {
 		console.log("Disparando OTA Update rápido (JavaScript apenas)...");
 
 		execSync(
-			`eas update --branch preview --environment preview --platform android --message "Update automático (Fingerprint: ${fingerprint})"`,
-			{
-				stdio: "inherit",
-				env: {
-					...process.env,
-					CI: "1",
-				},
-			},
+			`eas update --branch preview --environment preview --platform android --message "Update automático (Fingerprint: ${currentHash})" --non-interactive`,
+			{ stdio: "inherit" },
 		);
 	} else {
 		console.log("🏗️ O código nativo MUDOU (Nova lib ou config)!");
 		console.log("Iniciando a geração de um novo APK...");
 
 		execSync(
-			`eas build --platform android --profile preview --message "Fingerprint: ${currentHash}"`,
-			{
-				stdio: "inherit",
-				env: {
-					...process.env,
-					CI: "1",
-				},
-			},
+			`eas build --platform android --profile preview --message "Fingerprint: ${currentHash}" --non-interactive`,
+			{ stdio: "inherit" },
 		);
 	}
 } catch (error) {

@@ -1,13 +1,8 @@
 import { QueryClient, QueryClientProvider } from "@tanstack/react-query";
-import {
-	DarkTheme,
-	Slot,
-	ThemeProvider,
-	useRouter,
-	useSegments,
-} from "expo-router";
+import { DarkTheme, Stack, ThemeProvider } from "expo-router";
 import { StatusBar } from "expo-status-bar";
 import { useEffect } from "react";
+import { ActivityIndicator, View } from "react-native";
 import Toast from "react-native-toast-message";
 import { useAuthStore } from "@/store/useAuthStore";
 
@@ -28,35 +23,45 @@ const AppDarkTheme = {
 	},
 };
 
-const InitialLayout = () => {
+const RootNavigation = () => {
 	const { isAuthenticated, isHydrated, checkAuth } = useAuthStore();
-	const segments = useSegments();
-	const router = useRouter();
 
 	useEffect(() => {
 		checkAuth();
 	}, [checkAuth]);
 
-	useEffect(() => {
-		if (!isHydrated) return;
+	if (!isHydrated) {
+		return (
+			<View
+				style={{
+					flex: 1,
+					backgroundColor: "#0F172A",
+					justifyContent: "center",
+				}}
+			>
+				<ActivityIndicator size="large" color="#ffffff" />
+			</View>
+		);
+	}
 
-		const inAuthGroup = segments[0] === "(auth)";
+	return (
+		<Stack screenOptions={{ headerShown: false }}>
+			<Stack.Protected guard={!isAuthenticated}>
+				<Stack.Screen name="(auth)" />
+			</Stack.Protected>
 
-		if (!isAuthenticated && !inAuthGroup) {
-			router.replace("/(auth)/login");
-		} else if (isAuthenticated && inAuthGroup) {
-			router.replace("/(app)/dashboard");
-		}
-	}, [isAuthenticated, isHydrated, segments, router]);
-
-	return <Slot />;
+			<Stack.Protected guard={isAuthenticated}>
+				<Stack.Screen name="(app)" />
+			</Stack.Protected>
+		</Stack>
+	);
 };
 
 export default function RootLayout() {
 	return (
 		<ThemeProvider value={AppDarkTheme}>
 			<QueryClientProvider client={queryClient}>
-				<InitialLayout />
+				<RootNavigation />
 				<StatusBar style="light" />
 				<Toast />
 			</QueryClientProvider>
